@@ -1,0 +1,14 @@
+[project]
+name = "scipact-snakeai-demo"
+version = "0.1.0"
+description = "Snake Deep Q-learning (Patrick Loeber's tutorial) as a fixed-budget, seeded experiment harness"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2",
+    "pygame-ce>=2.5",
+    "torch>=2.6",
+]
+
+[tool.uv]
+package = false

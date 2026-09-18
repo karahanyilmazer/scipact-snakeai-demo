@@ -1,10 +1,78 @@
-# Teach AI To Play Snake! Reinforcement Learning With PyTorch and Pygame
+# Snake AI as an experiment harness
 
-In this Python Reinforcement Learning Tutorial series we teach an AI to play Snake! We build everything from scratch using Pygame and PyTorch. The tutorial consists of 4 parts:
+A fork of [patrickloeber/snake-ai-pytorch](https://github.com/patrickloeber/snake-ai-pytorch),
+the *Teach AI To Play Snake* tutorial (Deep Q-learning with PyTorch and Pygame,
+[playlist](https://www.youtube.com/playlist?list=PLqnslRFeH2UrDh7vUmJ60YrmWd64mTTKV)),
+turned into something you can run experiments on: fixed budgets, seeds, headless
+runs, and a results file. The learning algorithm is the tutorial's.
 
-You can find all tutorials on my channel: [Playlist](https://www.youtube.com/playlist?list=PLqnslRFeH2UrDh7vUmJ60YrmWd64mTTKV)
+## What changed
 
-- Part 1: I'll show you the project and teach you some basics about Reinforcement Learning and Deep Q Learning.
-- Part 2: Learn how to setup the environment and implement the Snake game.
-- Part 3: Implement the agent that controls the game.
-- Part 4: Implement the neural network to predict the moves and train it.
+- **One window.** The score chart (score per game, running mean) is drawn in the
+  game window next to the board; the separate matplotlib window and `helper.py`
+  are gone.
+- **`train.py`**, a harness: a fixed number of games, a seed, `--no-render` for
+  fast headless runs, identical runs over several seeds in parallel, A/B runs,
+  and a `results.json`.
+- **Seeding.** `random`, NumPy, torch and the game's food placement are seeded.
+- **Constants** at the top of `agent.py` (hidden size, learning rate, gamma,
+  batch size, memory, exploration length) that a run can override.
+- **Headless speed.** Without rendering there is no frame clock, so a run is
+  bound by training, not by drawing.
+
+`agent.py`, `model.py` and `game.py` keep the tutorial's structure and numerics;
+`snake_game_human.py` (play it yourself) is untouched.
+
+## Setup
+
+```
+uv sync
+```
+
+Python 3.11 or newer; `uv` picks 3.14 from `.python-version`.
+
+## Run
+
+```
+uv run agent.py                                      # the tutorial: train forever, watch it play
+uv run train.py --games 300 --seed 0 --no-render     # one run, ~minutes
+uv run train.py --games 300 --seed 0                 # the same, rendered
+uv run train.py --games 300 --seeds 0-4 --no-render  # five identical runs (different seeds), in parallel
+uv run train.py --games 300 --seeds 0-2 --ab HIDDEN_SIZE=512 --no-render   # A/B over the same seeds
+uv run train.py --smoke                              # 10 headless games, writes nothing
+uv run train.py --help
+```
+
+`--set NAME=VALUE` overrides a constant of `agent.py` for a run (repeatable);
+`--ab NAME=VALUE` runs a baseline arm without the override and a treatment arm
+with it over the same seeds. `--fps 0` renders unthrottled.
+
+## What a run writes
+
+`results.json` goes to `$SCIPACT_EXPERIMENT_DIR` when that variable is set,
+otherwise to the current directory; `--out` overrides. The statistic is
+**`mean_score`**: the mean score over the last `--last` games (default 100) of a
+run, so the number is about the trained agent, not the learning curve.
+
+| Mode | Keys |
+|---|---|
+| one run | `mean_score`, `mean_score_all`, `record`, `games`, `last`, `seed`, `steps`, `seconds`, `config`, `scores` |
+| `--seeds` | `mean_score` (mean over seeds), `std`, `spread` (max − min), `noise_floor` (= spread), `baseline` (= mean), `min`, `max`, `n_seeds`, `seeds`, `seconds`, `config`, `runs` (one entry per seed) |
+| `--ab` | `delta` (treatment − baseline), `deltas` (per seed), `ci_low`, `ci_high` (95 % paired t-interval), `n_seeds`, `seeds`, `seconds`, `treatment_config`, `arms.baseline`, `arms.treatment` (the `--seeds` shape) |
+
+With `--seeds` and `--ab`, every run is a separate headless process; its log and
+its own `results.json` are kept under `runs/` next to the results file.
+
+## Files
+
+| File | Role |
+|---|---|
+| `train.py` | the harness: budgets, seeds, headless runs, results |
+| `agent.py` | the agent, its constants, the training loop; `python agent.py` is the tutorial |
+| `model.py` | the Q-network and the trainer |
+| `game.py` | the Snake environment, rendering and the in-window chart |
+| `snake_game_human.py` | the game, keyboard-controlled |
+
+## License
+
+MIT, as upstream.
