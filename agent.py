@@ -9,7 +9,7 @@ from model import Linear_QNet, QTrainer
 
 # Hyperparameters. Agent() reads them when it is constructed, so
 # `train.py --set NAME=VALUE` can override any of them for one run.
-MAX_MEMORY = 100_000
+MAX_MEMORY = 1_000_000
 BATCH_SIZE = 1000
 LR = 0.00025
 GAMMA = 0.9  # discount rate
