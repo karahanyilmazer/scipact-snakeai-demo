@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "005-spread-with-lr-2p5e-4",
+  "hash": "7f79f4dab6989d1250da8254a34bb7f14c2828f66d7d3700fb92cead2c44e3d3",
+  "commit": "96660b6",
+  "readme": "results/experiments/005-spread-with-lr-2p5e-4/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:16:20+00:00",
+  "weight": "full",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
