@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "010-lr-1e-4",
+  "hash": "0c8dd0d46f576b61a75629faa616bc7f3db3368477ee7f8166b746b9c224dc49",
+  "commit": "6a07046",
+  "readme": "results/experiments/010-lr-1e-4/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:44:32+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
