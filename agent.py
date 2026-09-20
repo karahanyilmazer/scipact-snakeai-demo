@@ -12,7 +12,7 @@ from model import Linear_QNet, QTrainer
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.00025
-GAMMA = 0.95  # discount rate
+GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
 STATE_SIZE = 14  # 3 danger, 4 direction, 4 food, 3 trap
