@@ -6,3 +6,7 @@ __pycache__/
 /results.json
 *.pth
 .DS_Store
+
+# SciPact: contracts, verdicts and the scope are tracked
+!results/experiments/
+!results/SCOPE.md
