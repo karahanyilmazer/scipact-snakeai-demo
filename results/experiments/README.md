@@ -20,3 +20,4 @@ scope.
 | [005](005-spread-with-lr-2p5e-4/) | What is the run-to-run spread of mean_score on the kept code with trap bits and LR 2.5e-4? | full | scope | done | PASS | 2026-09-20 | PASS: on the kept code (trap bits, LR 2.5e-4) the spread over seeds 0-4 is 9.15 around a mean of 82.18, reproducing 004 exactly, so the floor is 9.15 and the baseline 82.18. |
 | [006](006-huber-loss/) | Huber (SmoothL1) loss instead of MSE | iteration | scope | done | DISCARD | 2026-09-20 | DISCARD: Huber loss drops mean_score from 82.18 to 65.04 (-17.14, floor 9.15), with seeds split 46-84. |
 | [007](007-free-run-features/) | Free-run length per move as three state features | iteration | scope | done | DISCARD | 2026-09-20 | DISCARD: free-run features drop mean_score from 82.18 to 72.02 (-10.16, floor 9.15), every seed down. |
+| [008](008-four-replay-batches/) | Four replay batches per game instead of one | iteration | scope | planned |  |  |  |
