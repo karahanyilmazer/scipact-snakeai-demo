@@ -1,0 +1,12 @@
+# scipact run 008-four-replay-batches
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:32:28+00:00
+# max seconds: 1500
+
+run seed 3: mean_score 73.96 record 169 (248 s)
+run seed 2: mean_score 85.90 record 165 (308 s)
+run seed 4: mean_score 93.15 record 169 (322 s)
+run seed 0: mean_score 87.87 record 170 (346 s)
+run seed 1: mean_score 94.78 record 166 (350 s)
+mean_score 87.13 over 5 seeds (std 8.22, spread 20.82); noise_floor 20.82, baseline 87.13
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/008-four-replay-batches/results.json
