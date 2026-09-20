@@ -16,7 +16,6 @@ GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
 STATE_SIZE = 14  # 3 danger, 4 direction, 4 food, 3 trap
-REPLAY_BATCHES = 4  # mini-batches sampled from memory at the end of each game
 
 CLOCKWISE = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
 
@@ -127,16 +126,13 @@ class Agent:
         )  # popleft if MAX_MEMORY is reached
 
     def train_long_memory(self):
-        for _ in range(REPLAY_BATCHES):
-            if len(self.memory) > BATCH_SIZE:
-                mini_sample = random.sample(self.memory, BATCH_SIZE)  # list of tuples
-            else:
-                mini_sample = self.memory
+        if len(self.memory) > BATCH_SIZE:
+            mini_sample = random.sample(self.memory, BATCH_SIZE)  # list of tuples
+        else:
+            mini_sample = self.memory
 
-            states, actions, rewards, next_states, dones = zip(
-                *mini_sample, strict=True
-            )
-            self.trainer.train_step(states, actions, rewards, next_states, dones)
+        states, actions, rewards, next_states, dones = zip(*mini_sample, strict=True)
+        self.trainer.train_step(states, actions, rewards, next_states, dones)
 
     def train_short_memory(self, state, action, reward, next_state, done):
         self.trainer.train_step(state, action, reward, next_state, done)
