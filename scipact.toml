@@ -77,7 +77,7 @@ autonomous_stop_multiplier = 2
 # that never returns; the close is then a VOID with a reason. 0 means no cap.
 # `scipact run --timeout N` overrides it for one run. Set it from a measured
 # run, with room: a 100-second run and a cap of 600 is a sensible pair.
-max_seconds = 600
+max_seconds = 1500
 
 [gate]
 # Commands that run an experiment. A Bash call whose command matches one of

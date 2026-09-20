@@ -1,0 +1,19 @@
+{
+  "outcome": "KEEP",
+  "statistic": "mean_score",
+  "statistic_value": 75.224,
+  "baseline": 33.174,
+  "baseline_from": "001-spread-of-mean-score-unchanged",
+  "improvement": 42.050000000000004,
+  "noise_floor": 1.32,
+  "calibration": "001-spread-of-mean-score-unchanged",
+  "direction": "max",
+  "branches": {
+    "KEEP": true,
+    "DISCARD": false
+  },
+  "tolerance": 0.0,
+  "experiment": "002-trap-bits-in-state",
+  "closed_at": "2026-09-20T18:04:42+00:00",
+  "lock_hash": "7d3c16c10370929718551991944597e135fa4eddf0edf9296ed64a104fe5f36b"
+}

@@ -1,0 +1,12 @@
+# scipact run 002-trap-bits-in-state
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T17:59:58+00:00
+# max seconds: 600
+
+run seed 3: mean_score 71.64 record 133 (224 s)
+run seed 4: mean_score 73.58 record 161 (242 s)
+run seed 2: mean_score 76.90 record 169 (244 s)
+run seed 0: mean_score 77.12 record 174 (263 s)
+run seed 1: mean_score 76.88 record 157 (278 s)
+mean_score 75.22 over 5 seeds (std 2.48, spread 5.48); noise_floor 5.48, baseline 75.22
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/002-trap-bits-in-state/results.json
