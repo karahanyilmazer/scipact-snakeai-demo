@@ -4,7 +4,7 @@ from collections import deque
 import numpy as np
 import torch
 
-from game import Direction, Point, SnakeGameAI
+from game import BLOCK_SIZE, Direction, Point, SnakeGameAI
 from model import Linear_QNet, QTrainer
 
 # Hyperparameters. Agent() reads them when it is constructed, so
@@ -15,6 +15,51 @@ LR = 0.001
 GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
+STATE_SIZE = 14  # 3 danger, 4 direction, 4 food, 3 trap
+
+CLOCKWISE = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
+
+
+def step(pt, direction):
+    """The cell one block from `pt` in `direction`."""
+    if direction == Direction.RIGHT:
+        return Point(pt.x + BLOCK_SIZE, pt.y)
+    if direction == Direction.LEFT:
+        return Point(pt.x - BLOCK_SIZE, pt.y)
+    if direction == Direction.DOWN:
+        return Point(pt.x, pt.y + BLOCK_SIZE)
+    return Point(pt.x, pt.y - BLOCK_SIZE)
+
+
+def reachable(game, start, cap):
+    """Free cells reachable from `start` without crossing a wall or the body,
+    counted up to `cap`; 0 when `start` itself is a wall or the body."""
+    if game.is_collision(start):
+        return 0
+    body = set(game.snake)
+    seen = {start}
+    stack = [start]
+    n = 0
+    while stack:
+        pt = stack.pop()
+        n += 1
+        if n >= cap:
+            return n
+        for q in (
+            Point(pt.x + BLOCK_SIZE, pt.y),
+            Point(pt.x - BLOCK_SIZE, pt.y),
+            Point(pt.x, pt.y + BLOCK_SIZE),
+            Point(pt.x, pt.y - BLOCK_SIZE),
+        ):
+            if (
+                q not in seen
+                and q not in body
+                and 0 <= q.x <= game.w - BLOCK_SIZE
+                and 0 <= q.y <= game.h - BLOCK_SIZE
+            ):
+                seen.add(q)
+                stack.append(q)
+    return n
 
 
 class Agent:
@@ -23,7 +68,7 @@ class Agent:
         self.epsilon = 0  # randomness
         self.gamma = GAMMA
         self.memory = deque(maxlen=MAX_MEMORY)  # popleft()
-        self.model = Linear_QNet(11, HIDDEN_SIZE, 3)
+        self.model = Linear_QNet(STATE_SIZE, HIDDEN_SIZE, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
@@ -65,6 +110,13 @@ class Agent:
             game.food.y < game.head.y,  # food up
             game.food.y > game.head.y,  # food down
         ]
+
+        # Trap straight / right / left: the move leads into a pocket smaller
+        # than the snake, so the head cannot get out before the body fills it.
+        i = CLOCKWISE.index(game.direction)
+        need = len(game.snake)
+        for d in (CLOCKWISE[i], CLOCKWISE[(i + 1) % 4], CLOCKWISE[(i - 1) % 4]):
+            state.append(reachable(game, step(head, d), need) < need)
 
         return np.array(state, dtype=int)
 
