@@ -32,7 +32,7 @@ class QTrainer:
         self.gamma = gamma
         self.model = model
         self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
-        self.criterion = nn.SmoothL1Loss()  # Huber: linear beyond |error| 1
+        self.criterion = nn.MSELoss()
 
     def train_step(self, state, action, reward, next_state, done):
         # np.array first: a tensor built from a list of arrays is slow and warns
