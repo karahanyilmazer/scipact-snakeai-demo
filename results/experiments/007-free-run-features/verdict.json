@@ -1,0 +1,19 @@
+{
+  "outcome": "DISCARD",
+  "statistic": "mean_score",
+  "statistic_value": 72.022,
+  "baseline": 82.18,
+  "baseline_from": "004-lr-2p5e-4",
+  "improvement": -10.158000000000001,
+  "noise_floor": 9.15,
+  "calibration": "005-spread-with-lr-2p5e-4",
+  "direction": "max",
+  "branches": {
+    "KEEP": false,
+    "DISCARD": true
+  },
+  "tolerance": 0.0,
+  "experiment": "007-free-run-features",
+  "closed_at": "2026-09-20T18:31:35+00:00",
+  "lock_hash": "03ec97fd9dfa8970744d6963572b44b281bc134c5ccd5638c0fbbe672e7359f1"
+}

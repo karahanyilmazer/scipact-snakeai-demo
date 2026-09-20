@@ -1,0 +1,12 @@
+# scipact run 007-free-run-features
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:27:05+00:00
+# max seconds: 1500
+
+run seed 2: mean_score 73.50 record 135 (204 s)
+run seed 3: mean_score 66.23 record 151 (227 s)
+run seed 4: mean_score 69.77 record 139 (239 s)
+run seed 0: mean_score 72.51 record 158 (259 s)
+run seed 1: mean_score 78.10 record 144 (262 s)
+mean_score 72.02 over 5 seeds (std 4.42, spread 11.87); noise_floor 11.87, baseline 72.02
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/007-free-run-features/results.json
