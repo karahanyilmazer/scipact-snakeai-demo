@@ -3,17 +3,17 @@ scipact: 1
 number: 1
 slug: spread-of-mean-score-unchanged
 title: What is the run-to-run spread of mean_score on the unchanged code?
-status: planned
+status: done
 weight: full
 needs_approval: false
 involves:
   held_out_data: false
   external_submission: false
   deletes_data: false
-date_started: null
-date_completed: null
-verdict: null
-tldr: null
+date_started: 2026-09-20
+date_completed: 2026-09-20
+verdict: PASS
+tldr: "PASS: the unchanged agent scores 33.17 +/- 0.61 over seeds 0-4 with a seed-to-seed spread of 1.32, so the noise floor is 1.32 and the baseline 33.17."
 results: results.json
 rule:
   statistic: noise_floor
@@ -41,9 +41,9 @@ calibration: true
      needs the whole interval under the bar; the rest is INCONCLUSIVE. Replace
      every line with this question's statistic and bars. -->
 
-**Outcome (TL;DR):** *one sentence, filled in after running, leading with the verdict. The single most important field.*
+**Outcome (TL;DR):** PASS: the unchanged agent scores 33.17 +/- 0.61 (mean over seeds 0-4 of the last-100 mean) with a seed-to-seed spread of 1.32, so the noise floor is 1.32 and the baseline 33.17.
 
-**So what?** *Two or three plain-language sentences, filled in after running. Why does this matter for the next decision? Write for a reader who has not seen the details below.*
+**So what?** The instrument is far tighter than assumed: five seeds land within 1.3 points of each other at game 300, because the tutorial agent settles on a stable plateau and the last-100 mean averages it out. An iteration therefore counts as KEEP once it lifts the five-seed mean above 34.49, and the campaign can resolve small effects, not only algorithmic leaps. The floor will need re-measuring after a KEEP, since a better agent plays longer, more variable games.
 
 ---
 
@@ -125,29 +125,66 @@ be wrong: the tutorial agent's last-100 mean lands somewhere around 20-40 at
 ---
 
 ## Results
-*Fill in after running.*
 
-The actual numbers, with intervals. A bare point estimate is not a result.
-Embed figures from `./figures/`. Quote the verdict block that `scipact close`
-printed.
+`mean_score` over the last 100 of 300 games, one run per seed, 300 games each:
+
+| seed | mean_score | record | steps | seconds | mean of first 100 games |
+|---|---|---|---|---|---|
+| 0 | 33.75 | 76 | 166658 | 47.1 | 4.62 |
+| 1 | 32.76 | 68 | 163206 | 46.8 | 1.49 |
+| 2 | 32.60 | 66 | 159076 | 44.4 | 6.60 |
+| 3 | 32.84 | 81 | 159303 | 44.6 | 0.39 |
+| 4 | 33.92 | 71 | 172125 | 48.1 | 3.21 |
+
+Mean over seeds **33.174**, std 0.61 (so the mean's standard error is about
+0.27), min 32.60, max 33.92, **spread (noise_floor) 1.32**. The whole
+reading took 49 s wall clock with the five runs in parallel.
+
+```
+✓ 001-spread-of-mean-score-unchanged closed: PASS
+    key statistic noise_floor = 1.32
+    PASS          fired  noise_floor <= 20
+    FAIL          no     noise_floor > 30
+```
 
 ## Interpretation
-*Fill in after running. The agent's reading of the results, applying the
-pre-registered rule. Name which branch fired. Be honest about ambiguity; if
-the experiment did not cleanly answer the question, say so.*
+
+The PASS branch fired: `noise_floor` = 1.32 is at most 20. Iterations
+inherit floor 1.32 and baseline 33.174.
+
+The pre-registration said a spread under 5 would be checked before being
+trusted, since it could mean the seeding was not reaching everything. It is
+reaching everything: the five runs differ in their records (66-81), their
+step counts (159k-172k) and, most visibly, their learning curves (the mean
+of the first 100 games ranges from 0.39 to 6.60). What is tight is the
+level at game 300, not the runs: every seed converges to the same plateau
+near 33, and the last-100 mean averages 100 games of it, so its per-seed
+standard error is about 1.3 for a per-game score std of about 13. A spread
+of 1.32 over five such values is what that arithmetic gives. The prior
+(10-20 points) was wrong about the plateau's stability, not about the
+seeding.
 
 ## Deviations from pre-registration
-*Fill in after running. Leave as "none" if there were none. The lock detects
-edits to the sections above; a documented deviation is a finding, an
-undocumented one is noise in the archive.*
 
 none
 
 ## Next steps
-*Fill in after running.*
+
+- Set `[run].max_seconds` from the measured 49 s reading, with room for
+  changes that lengthen games (a better agent plays longer games): 600 s.
+- Open the first iteration against baseline 33.174 with floor 1.32.
+- Recalibrate after the first KEEP: the spread grows with the level, and a
+  floor measured at 33 will under-read the noise at 60 or 90.
 
 ## Caveats / known issues
-*Fill in after running.*
+
+- The floor is the range of five single-seed values applied to a five-seed
+  mean, so it over-reads the mean's noise (SE about 0.27) by about five
+  times; KEEP is conservative. That is the approved scope's rule.
+- Five seeds give one draw of the range; a different five could read
+  somewhat tighter or looser. The same five are used for every step, so the
+  comparison is paired, but a change that helps only on other seeds is
+  invisible here.
 
 ## Reviewer notes
 *For the human reviewer. The agent never writes here. Date each note.*

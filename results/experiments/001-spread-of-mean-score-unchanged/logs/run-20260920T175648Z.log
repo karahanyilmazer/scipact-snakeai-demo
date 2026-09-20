@@ -1,0 +1,12 @@
+# scipact run 001-spread-of-mean-score-unchanged
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T17:56:48+00:00
+# max seconds: 1800
+
+run seed 2: mean_score 32.60 record 66 (44 s)
+run seed 3: mean_score 32.84 record 81 (45 s)
+run seed 1: mean_score 32.76 record 68 (47 s)
+run seed 0: mean_score 33.75 record 76 (47 s)
+run seed 4: mean_score 33.92 record 71 (48 s)
+mean_score 33.17 over 5 seeds (std 0.61, spread 1.32); noise_floor 1.32, baseline 33.17
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/001-spread-of-mean-score-unchanged/results.json
