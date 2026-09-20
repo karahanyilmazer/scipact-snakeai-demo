@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "009-target-network",
+  "hash": "e7cd37604268f9e79c0f8692ae362ca8781271920f6303dc6952c9224e2b0d62",
+  "commit": "e16d6b7",
+  "readme": "results/experiments/009-target-network/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:39:10+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
