@@ -1,0 +1,12 @@
+# scipact run 003-spread-with-trap-bits
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:05:46+00:00
+# max seconds: 1500
+
+run seed 3: mean_score 71.64 record 133 (227 s)
+run seed 4: mean_score 73.58 record 161 (241 s)
+run seed 2: mean_score 76.90 record 169 (250 s)
+run seed 0: mean_score 77.12 record 174 (266 s)
+run seed 1: mean_score 76.88 record 157 (284 s)
+mean_score 75.22 over 5 seeds (std 2.48, spread 5.48); noise_floor 5.48, baseline 75.22
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/003-spread-with-trap-bits/results.json

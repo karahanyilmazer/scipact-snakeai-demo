@@ -3,17 +3,17 @@ scipact: 1
 number: 3
 slug: spread-with-trap-bits
 title: What is the run-to-run spread of mean_score on the kept code with trap bits?
-status: planned
+status: done
 weight: full
 needs_approval: false
 involves:
   held_out_data: false
   external_submission: false
   deletes_data: false
-date_started: null
-date_completed: null
-verdict: null
-tldr: null
+date_started: 2026-09-20
+date_completed: 2026-09-20
+verdict: PASS
+tldr: "PASS: on the kept code the spread over seeds 0-4 is 5.48 around a mean of 75.22, reproducing 002 bit for bit, so the floor is 5.48 and the baseline 75.22."
 results: results.json
 rule:
   statistic: noise_floor
@@ -41,9 +41,9 @@ calibration: true
      needs the whole interval under the bar; the rest is INCONCLUSIVE. Replace
      every line with this question's statistic and bars. -->
 
-**Outcome (TL;DR):** *one sentence, filled in after running, leading with the verdict. The single most important field.*
+**Outcome (TL;DR):** PASS: on the kept code the spread over seeds 0-4 is 5.48 around a mean of 75.22, reproducing 002 bit for bit, so the floor is 5.48 and the baseline 75.22.
 
-**So what?** *Two or three plain-language sentences, filled in after running. Why does this matter for the next decision? Write for a reader who has not seen the details below.*
+**So what?** The floor grew from 1.32 to 5.48 as the level went from 33 to 75, as expected: longer, more variable games. The next iterations need to lift the five-seed mean above 80.70 to count. The reading also showed training is fully deterministic under the seeds (every per-seed value, record and step count matched 002), so a repeat of a command is a check of the code, never a new draw of the noise.
 
 ---
 
@@ -122,29 +122,58 @@ placement, exploration, initial weights) are seeded.
 ---
 
 ## Results
-*Fill in after running.*
 
-The actual numbers, with intervals. A bare point estimate is not a result.
-Embed figures from `./figures/`. Quote the verdict block that `scipact close`
-printed.
+| seed | mean_score | record | steps | seconds |
+|---|---|---|---|---|
+| 0 | 77.12 | 174 | 505568 | 266 |
+| 1 | 76.88 | 157 | 543746 | 284 |
+| 2 | 76.90 | 169 | 478823 | 250 |
+| 3 | 71.64 | 133 | 455723 | 227 |
+| 4 | 73.58 | 161 | 477509 | 241 |
+
+Mean over seeds **75.224**, std 2.48 (standard error of the
+mean about 1.1), min 71.64, max 77.12, **spread (noise_floor) 5.48**;
+wall clock 284 s. Every per-seed `mean_score`, `record` and `steps`
+value is identical to 002's.
+
+```
+✓ 003-spread-with-trap-bits closed: PASS
+    key statistic noise_floor = 5.48
+    PASS          fired  noise_floor <= 10
+    FAIL          no     noise_floor > 20
+```
 
 ## Interpretation
-*Fill in after running. The agent's reading of the results, applying the
-pre-registered rule. Name which branch fired. Be honest about ambiguity; if
-the experiment did not cleanly answer the question, say so.*
+
+The PASS branch fired: `noise_floor` = 5.48 is at most 10. Iterations
+inherit floor 5.48 and baseline 75.224 from here.
+
+Training is deterministic under the seeds: this reading is 002's reading to
+the last digit. So, as the instrument check said, this contract added no
+independent draw of the range; it re-measured the floor at the new level
+with the same five seeds, which is what the iterations are paired against.
+The spread's growth (1.32 to 5.48, about four times, while the level went
+up 2.3 times) is in line with longer games having more room to vary.
 
 ## Deviations from pre-registration
-*Fill in after running. Leave as "none" if there were none. The lock detects
-edits to the sections above; a documented deviation is a finding, an
-undocumented one is noise in the archive.*
 
 none
 
 ## Next steps
-*Fill in after running.*
+
+- Iterations against baseline 75.22 with floor 5.48; KEEP needs > 80.70.
+- Because a repeat run reproduces exactly, a future recalibration after a
+  KEEP can quote the KEEP's own per-seed spread rather than re-run, if the
+  scope is ever edited to allow it; under the current scope it re-runs.
 
 ## Caveats / known issues
-*Fill in after running.*
+
+- The floor is one draw of a five-seed range, and a deterministic re-run
+  cannot widen that draw; only different seeds could, and those are out of
+  scope.
+- The single-seed range over-reads the noise of the five-seed mean (SE
+  about 1.1); effects between about 2 and 5.5 points will read
+  INCONCLUSIVE.
 
 ## Reviewer notes
 *For the human reviewer. The agent never writes here. Date each note.*

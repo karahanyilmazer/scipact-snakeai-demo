@@ -1,0 +1,29 @@
+{
+  "outcome": "PASS",
+  "statistic": "noise_floor",
+  "statistic_value": 5.48,
+  "branches": {
+    "PASS": true,
+    "FAIL": false
+  },
+  "tolerance": 0.0,
+  "values": {
+    "mean_score": 75.224,
+    "std": 2.4846,
+    "spread": 5.48,
+    "noise_floor": 5.48,
+    "baseline": 75.224,
+    "min": 71.64,
+    "max": 77.12,
+    "n_seeds": 5,
+    "games": 300,
+    "last": 100,
+    "seconds": 284.5
+  },
+  "calibrates": "mean_score",
+  "noise_floor": 5.48,
+  "baseline": 75.224,
+  "experiment": "003-spread-with-trap-bits",
+  "closed_at": "2026-09-20T18:10:58+00:00",
+  "lock_hash": "5cf9884a2557d39cdab352876509dfb6244c5751a12b444494d6fb93d982ff13"
+}
