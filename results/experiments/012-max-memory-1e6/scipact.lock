@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "012-max-memory-1e6",
+  "hash": "91747af4c0688a153212ede9e4e54bc7afc64abec345fe97956da3b9329e8134",
+  "commit": "692d312",
+  "readme": "results/experiments/012-max-memory-1e6/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:52:54+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
