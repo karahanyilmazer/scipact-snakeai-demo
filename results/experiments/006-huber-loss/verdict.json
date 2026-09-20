@@ -1,0 +1,19 @@
+{
+  "outcome": "DISCARD",
+  "statistic": "mean_score",
+  "statistic_value": 65.036,
+  "baseline": 82.18,
+  "baseline_from": "004-lr-2p5e-4",
+  "improvement": -17.144000000000005,
+  "noise_floor": 9.15,
+  "calibration": "005-spread-with-lr-2p5e-4",
+  "direction": "max",
+  "branches": {
+    "KEEP": false,
+    "DISCARD": true
+  },
+  "tolerance": 0.0,
+  "experiment": "006-huber-loss",
+  "closed_at": "2026-09-20T18:26:23+00:00",
+  "lock_hash": "d83b99f14c8dad07a8dfe0b736097849e34538c3cdea20f67fb5fab283ae3055"
+}

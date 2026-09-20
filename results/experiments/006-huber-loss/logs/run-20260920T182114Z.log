@@ -1,0 +1,12 @@
+# scipact run 006-huber-loss
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:21:14+00:00
+# max seconds: 1500
+
+run seed 3: mean_score 58.10 record 170 (159 s)
+run seed 1: mean_score 45.94 record 141 (168 s)
+run seed 0: mean_score 67.30 record 160 (216 s)
+run seed 2: mean_score 69.98 record 160 (223 s)
+run seed 4: mean_score 83.86 record 179 (298 s)
+mean_score 65.04 over 5 seeds (std 14.11, spread 37.92); noise_floor 37.92, baseline 65.04
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/006-huber-loss/results.json
