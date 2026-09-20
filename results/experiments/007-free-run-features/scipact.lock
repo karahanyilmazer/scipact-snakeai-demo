@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "007-free-run-features",
+  "hash": "03ec97fd9dfa8970744d6963572b44b281bc134c5ccd5638c0fbbe672e7359f1",
+  "commit": "e195ea0",
+  "readme": "results/experiments/007-free-run-features/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:27:04+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
