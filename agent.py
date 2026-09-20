@@ -11,7 +11,7 @@ from model import Linear_QNet, QTrainer
 # `train.py --set NAME=VALUE` can override any of them for one run.
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
-LR = 0.0001
+LR = 0.00025
 GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
