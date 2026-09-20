@@ -2,14 +2,19 @@
 """Fixed-budget, seeded, optionally headless training runs that write results.json.
 
     uv run train.py --games 300 --seed 0 --no-render               one run
-    uv run train.py --games 300 --seeds 0-4 --no-render            identical runs: spread and mean
+    uv run train.py --games 300 --seeds 0-4 --no-render            five seeds: their mean and spread
+    uv run train.py --games 300 --seeds 0-4 --replicates 5         calibration: five 5-seed readings on
+                                                                   disjoint seed sets, the floor of the mean
     uv run train.py --games 300 --seeds 0-2 --ab HIDDEN_SIZE=512   A/B over the same seeds
     uv run train.py --smoke                                        does the code run? (10 games)
 
 The algorithm lives in agent.py and model.py; this file only runs it and
 measures. The statistic is mean_score: the mean score over the last --last
-games of a run. results.json goes to $SCIPACT_EXPERIMENT_DIR when that is
-set, else to the current directory; --out overrides.
+games of a run, or its mean over the seeds of a --seeds run. A noise floor
+for that statistic is the spread of repeated readings of it on fresh seeds,
+which is what --replicates measures; the spread between single seeds
+(seed_spread) is not it. results.json goes to $SCIPACT_EXPERIMENT_DIR when
+that is set, else to the current directory; --out overrides.
 """
 
 import argparse
@@ -180,15 +185,18 @@ def run_many(args, jobs, out_dir):
 
 
 def aggregate(runs, args):
-    """Identical runs summarised: mean_score is their mean, noise_floor their spread."""
+    """One reading over several seeds: mean_score is their mean, seed_spread their range.
+
+    seed_spread is the spread between single seeds, not the noise floor of the
+    mean; a floor is measured by repeating the reading on fresh seeds
+    (--replicates).
+    """
     values = [r["mean_score"] for r in runs]
     m = mean(values)
     return {
         "mean_score": round(m, 4),
         "std": round(statistics.stdev(values), 4) if len(values) > 1 else 0.0,
-        "spread": round(max(values) - min(values), 4),
-        "noise_floor": round(max(values) - min(values), 4),
-        "baseline": round(m, 4),
+        "seed_spread": round(max(values) - min(values), 4),
         "min": min(values),
         "max": max(values),
         "n_seeds": len(runs),
@@ -203,6 +211,51 @@ def aggregate(runs, args):
 def run_seeds(args, seeds, overrides, out_dir):
     grouped = run_many(args, [("run", s, overrides) for s in seeds], out_dir)
     return aggregate(grouped["run"], args)
+
+
+def seed_sets(seeds, replicates):
+    """The given seeds, then consecutive disjoint sets of the same size after the highest."""
+    sets = [list(seeds)]
+    nxt = max(seeds) + 1
+    for _ in range(replicates - 1):
+        sets.append(list(range(nxt, nxt + len(seeds))))
+        nxt += len(seeds)
+    return sets
+
+
+def run_replicates(args, seeds, overrides, out_dir):
+    """A calibration: the same N-seed reading on R disjoint seed sets.
+
+    Writes what a calibration contract needs: noise_floor (the spread of the R
+    reading means), baseline (their mean), readings (R) and instrument (one line).
+    """
+    if args.replicates < 2:
+        raise SystemExit(
+            "train.py: --replicates needs 2 or more readings to measure a spread"
+        )
+    sets = seed_sets(seeds, args.replicates)
+    jobs = [(f"reading{i + 1}", s, overrides) for i, ss in enumerate(sets) for s in ss]
+    grouped = run_many(args, jobs, out_dir)
+    readings = [aggregate(grouped[f"reading{i + 1}"], args) for i in range(len(sets))]
+    means = [r["mean_score"] for r in readings]
+    m = mean(means)
+    return {
+        "mean_score": round(m, 4),
+        "baseline": round(m, 4),
+        "noise_floor": round(max(means) - min(means), 4),
+        "readings": len(sets),
+        "instrument": (
+            f"mean over {len(seeds)} seeds of the mean score over the last "
+            f"{min(args.last, args.games)} of {args.games} games"
+        ),
+        "reading_means": [round(x, 4) for x in means],
+        "reading_std": round(statistics.stdev(means), 4) if len(means) > 1 else 0.0,
+        "seed_sets": sets,
+        "games": args.games,
+        "last": args.last,
+        "config": readings[0]["config"],
+        "readings_detail": readings,
+    }
 
 
 def run_ab(args, seeds, base, treatment, out_dir):
@@ -244,11 +297,17 @@ def summary(result):
             f"over {result['n_seeds']} seeds: treatment {t['mean_score']:.2f} vs baseline "
             f"{b['mean_score']:.2f} ({result['treatment_config']})"
         )
-    if "noise_floor" in result:
+    if "readings" in result:
+        return (
+            f"{result['readings']} readings of the {result['instrument']}: "
+            f"{', '.join(f'{x:.2f}' for x in result['reading_means'])}; "
+            f"noise_floor {result['noise_floor']:.2f}, baseline {result['baseline']:.2f}"
+        )
+    if "seed_spread" in result:
         return (
             f"mean_score {result['mean_score']:.2f} over {result['n_seeds']} seeds "
-            f"(std {result['std']:.2f}, spread {result['spread']:.2f}); "
-            f"noise_floor {result['noise_floor']:.2f}, baseline {result['baseline']:.2f}"
+            f"(std {result['std']:.2f}, seed_spread {result['seed_spread']:.2f}); "
+            f"a noise floor for this mean needs --replicates"
         )
     return (
         f"mean_score {result['mean_score']:.2f} over the last {result['last']} of "
@@ -308,6 +367,12 @@ def parse_args(argv=None):
         help="A/B: run a baseline arm (without these overrides) and a treatment arm (with them) over the same --seeds and report the paired delta; repeatable",
     )
     p.add_argument(
+        "--replicates",
+        type=int,
+        metavar="R",
+        help="calibration: repeat the --seeds reading on R disjoint seed sets (the given seeds, then the next ones) and write noise_floor, baseline, readings and instrument",
+    )
+    p.add_argument(
         "--no-render",
         action="store_true",
         help="no window: skip drawing and the frame clock (much faster)",
@@ -346,6 +411,10 @@ def main(argv=None):
         raise SystemExit(
             "train.py: --ab needs --seeds (2 or more) so the arms share seeds"
         )
+    if args.replicates and (not args.seeds or treatment):
+        raise SystemExit(
+            "train.py: --replicates needs --seeds and cannot be combined with --ab"
+        )
     out = args.out
     if out is None:
         exp_dir = os.environ.get("SCIPACT_EXPERIMENT_DIR")
@@ -356,6 +425,8 @@ def main(argv=None):
         args.no_render = True
         if treatment:
             result = run_ab(args, args.seeds, overrides, treatment, out.parent)
+        elif args.replicates:
+            result = run_replicates(args, args.seeds, overrides, out.parent)
         else:
             result = run_seeds(args, args.seeds, overrides, out.parent)
         result["seconds"] = round(time.monotonic() - started, 1)

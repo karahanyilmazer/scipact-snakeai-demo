@@ -37,7 +37,8 @@ Python 3.11 or newer; `uv` picks 3.14 from `.python-version`.
 uv run agent.py                                      # the tutorial: train forever, watch it play
 uv run train.py --games 300 --seed 0 --no-render     # one run, ~minutes
 uv run train.py --games 300 --seed 0                 # the same, rendered
-uv run train.py --games 300 --seeds 0-4 --no-render  # five identical runs (different seeds), in parallel
+uv run train.py --games 300 --seeds 0-4 --no-render  # five seeds in parallel: their mean and spread
+uv run train.py --games 300 --seeds 0-4 --replicates 5 --no-render   # calibration: the same 5-seed reading on 5 disjoint seed sets
 uv run train.py --games 300 --seeds 0-2 --ab HIDDEN_SIZE=512 --no-render   # A/B over the same seeds
 uv run train.py --smoke                              # 10 headless games, writes nothing
 uv run train.py --help
@@ -52,16 +53,28 @@ with it over the same seeds. `--fps 0` renders unthrottled.
 `results.json` goes to `$SCIPACT_EXPERIMENT_DIR` when that variable is set,
 otherwise to the current directory; `--out` overrides. The statistic is
 **`mean_score`**: the mean score over the last `--last` games (default 100) of a
-run, so the number is about the trained agent, not the learning curve.
+run, so the number is about the trained agent, not the learning curve; with
+`--seeds` it is the mean of that over the seeds.
+
+A **noise floor** for a statistic is the spread of repeated readings of it with
+nothing changed. Training is deterministic under a seed, so repeating the same
+seeds gives spread 0 and the readings must use fresh seeds: `--replicates R`
+repeats the `--seeds` reading on R disjoint seed sets (the given seeds, then
+the next ones: `--seeds 0-4 --replicates 5` uses 0–4, 5–9, …, 20–24) and writes
+`noise_floor` as the spread of the R reading means. The spread between single
+seeds of one reading (`seed_spread`) is not the floor of their mean; it is
+about √N larger.
 
 | Mode | Keys |
 |---|---|
 | one run | `mean_score`, `mean_score_all`, `record`, `games`, `last`, `seed`, `steps`, `seconds`, `config`, `scores` |
-| `--seeds` | `mean_score` (mean over seeds), `std`, `spread` (max − min), `noise_floor` (= spread), `baseline` (= mean), `min`, `max`, `n_seeds`, `seeds`, `seconds`, `config`, `runs` (one entry per seed) |
+| `--seeds` | `mean_score` (mean over seeds), `std`, `seed_spread` (max − min of the seeds), `min`, `max`, `n_seeds`, `seeds`, `seconds`, `config`, `runs` (one entry per seed) |
+| `--seeds --replicates R` | `noise_floor` (spread of the R reading means), `baseline` (their mean, = `mean_score`), `readings` (R), `instrument` (one line), `reading_means`, `reading_std`, `seed_sets`, `seconds`, `config`, `readings_detail` (one `--seeds` block per reading) |
 | `--ab` | `delta` (treatment − baseline), `deltas` (per seed), `ci_low`, `ci_high` (95 % paired t-interval), `n_seeds`, `seeds`, `seconds`, `treatment_config`, `arms.baseline`, `arms.treatment` (the `--seeds` shape) |
 
-With `--seeds` and `--ab`, every run is a separate headless process; its log and
-its own `results.json` are kept under `runs/` next to the results file.
+With `--seeds`, `--replicates` and `--ab`, every run is a separate headless
+process; its log and its own `results.json` are kept under `runs/` next to the
+results file.
 
 ## Files
 
