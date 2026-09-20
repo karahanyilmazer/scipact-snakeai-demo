@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "011-gamma-0p95",
+  "hash": "0575375a998ce552afb6a52d58b622d141342d44aea42d61c2359b9f34c8ea25",
+  "commit": "50f4f6b",
+  "readme": "results/experiments/011-gamma-0p95/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:47:32+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
