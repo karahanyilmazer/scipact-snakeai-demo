@@ -3,17 +3,17 @@ scipact: 1
 number: 5
 slug: spread-with-lr-2p5e-4
 title: What is the run-to-run spread of mean_score on the kept code with trap bits and LR 2.5e-4?
-status: planned
+status: done
 weight: full
 needs_approval: false
 involves:
   held_out_data: false
   external_submission: false
   deletes_data: false
-date_started: null
-date_completed: null
-verdict: null
-tldr: null
+date_started: 2026-09-20
+date_completed: 2026-09-20
+verdict: PASS
+tldr: "PASS: on the kept code (trap bits, LR 2.5e-4) the spread over seeds 0-4 is 9.15 around a mean of 82.18, reproducing 004 exactly, so the floor is 9.15 and the baseline 82.18."
 results: results.json
 rule:
   statistic: noise_floor
@@ -41,9 +41,9 @@ calibration: true
      needs the whole interval under the bar; the rest is INCONCLUSIVE. Replace
      every line with this question's statistic and bars. -->
 
-**Outcome (TL;DR):** *one sentence, filled in after running, leading with the verdict. The single most important field.*
+**Outcome (TL;DR):** PASS: on the kept code (trap bits, LR 2.5e-4) the spread over seeds 0-4 is 9.15 around a mean of 82.18, reproducing 004 exactly, so the floor is 9.15 and the baseline 82.18.
 
-**So what?** *Two or three plain-language sentences, filled in after running. Why does this matter for the next decision? Write for a reader who has not seen the details below.*
+**So what?** The floor is now 9.15 at level 82: a change must lift the five-seed mean above 91.33 to count as KEEP, and one that drops it below 73.03 is a DISCARD; the band between is INCONCLUSIVE. Determinism held a second time, so the per-seed spread of a KEEP is a faithful preview of the next calibration.
 
 ---
 
@@ -118,29 +118,47 @@ contract's own results, and a re-run is also a second determinism check.
 ---
 
 ## Results
-*Fill in after running.*
 
-The actual numbers, with intervals. A bare point estimate is not a result.
-Embed figures from `./figures/`. Quote the verdict block that `scipact close`
-printed.
+| seed | mean_score | record | steps | seconds |
+|---|---|---|---|---|
+| 0 | 80.23 | 146 | 441069 | 214 |
+| 1 | 86.70 | 169 | 446075 | 218 |
+| 2 | 77.55 | 146 | 311238 | 142 |
+| 3 | 83.60 | 147 | 356296 | 170 |
+| 4 | 82.82 | 154 | 514840 | 252 |
+
+Mean over seeds **82.180**, std 3.47 (standard error of the
+mean about 1.6), min 77.55, max 86.7, **spread (noise_floor) 9.15**;
+wall clock 253 s. Per-seed `mean_score`, `record` and `steps`
+identical to 004's: yes.
+
+```
+✓ 005-spread-with-lr-2p5e-4 closed: PASS
+    key statistic noise_floor = 9.15
+    PASS          fired  noise_floor <= 12
+    FAIL          no     noise_floor > 20
+```
 
 ## Interpretation
-*Fill in after running. The agent's reading of the results, applying the
-pre-registered rule. Name which branch fired. Be honest about ambiguity; if
-the experiment did not cleanly answer the question, say so.*
+
+The PASS branch fired: `noise_floor` = 9.15 is at most 12. Iterations
+inherit floor 9.15 and baseline 82.18 from here. The reading reproduced
+004 exactly, as the prior said, so it is the same draw of the range at the
+level the next steps are judged at, not a new one.
 
 ## Deviations from pre-registration
-*Fill in after running. Leave as "none" if there were none. The lock detects
-edits to the sections above; a documented deviation is a finding, an
-undocumented one is noise in the archive.*
 
 none
 
 ## Next steps
-*Fill in after running.*
+
+- Iterations against baseline 82.18 with floor 9.15; KEEP needs > 91.33.
 
 ## Caveats / known issues
-*Fill in after running.*
+
+- The floor is one draw of a five-seed range; the range over-reads the
+  mean's noise (SE about 1.6), so effects between about 3 and 9 points
+  read INCONCLUSIVE under this scope.
 
 ## Reviewer notes
 *For the human reviewer. The agent never writes here. Date each note.*

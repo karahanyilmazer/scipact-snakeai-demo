@@ -9,16 +9,15 @@ old versions. Rewrite it in full at every handoff and keep it under a screen.
   0-4) of the Snake DQN agent; 10 iterations, then hand off. 2 of 10 run.
 - Best kept: **82.18** with trap bits (002, +42.05) and LR 2.5e-4 (004,
   +6.96) on the tutorial's 33.17. HEAD holds both.
-- Floor in force 5.48, baseline 75.22 (003, PASS); stale, the kept code's
-  own spread is 9.15, so recalibrate first. A reading now
+- Floor in force 9.15, baseline 82.18 (005, PASS); KEEP needs > 91.33. A
+  reading now
   takes about 280 s; `[run].max_seconds` is 1500.
 
 ## Next
 
-1. Recalibrate on the kept code at level 82.
-2. Does a Huber loss lift the plateau (the -10/+10 rewards make MSE
+1. Does a Huber loss lift the plateau (the -10/+10 rewards make MSE
    targets spiky)?
-3. Then: a target network, longer exploration, a deeper net, a
+2. Then: a target network, longer exploration, a deeper net, a
    food-distance feature, a bigger batch, GAMMA 0.95.
 
 ## Blocked on a person
