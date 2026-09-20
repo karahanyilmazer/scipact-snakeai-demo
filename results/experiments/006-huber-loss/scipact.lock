@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "006-huber-loss",
+  "hash": "d83b99f14c8dad07a8dfe0b736097849e34538c3cdea20f67fb5fab283ae3055",
+  "commit": "c574e5d",
+  "readme": "results/experiments/006-huber-loss/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:21:14+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
