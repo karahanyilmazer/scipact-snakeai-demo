@@ -1,3 +1,4 @@
+import copy
 import os
 
 import numpy as np
@@ -27,14 +28,23 @@ class Linear_QNet(nn.Module):
 
 
 class QTrainer:
-    def __init__(self, model, lr, gamma):
+    def __init__(self, model, lr, gamma, target_sync=0):
         self.lr = lr
         self.gamma = gamma
         self.model = model
         self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
         self.criterion = nn.MSELoss()
+        # Bootstrap targets come from a frozen copy of the model, refreshed
+        # every `target_sync` train steps; 0 means the live model, as in the
+        # tutorial.
+        self.target_sync = target_sync
+        self.target = copy.deepcopy(model) if target_sync else model
+        self.n_steps = 0
 
     def train_step(self, state, action, reward, next_state, done):
+        self.n_steps += 1
+        if self.target_sync and self.n_steps % self.target_sync == 0:
+            self.target.load_state_dict(self.model.state_dict())
         # np.array first: a tensor built from a list of arrays is slow and warns
         state = torch.tensor(np.array(state), dtype=torch.float)
         next_state = torch.tensor(np.array(next_state), dtype=torch.float)
@@ -58,7 +68,7 @@ class QTrainer:
             Q_new = reward[idx]
             if not done[idx]:
                 Q_new = reward[idx] + self.gamma * torch.max(
-                    self.model(next_state[idx])
+                    self.target(next_state[idx])
                 )
 
             target[idx][torch.argmax(action[idx]).item()] = Q_new
