@@ -1,0 +1,12 @@
+# scipact run 011-gamma-0p95
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:47:32+00:00
+# max seconds: 1500
+
+run seed 3: mean_score 78.76 record 149 (231 s)
+run seed 4: mean_score 75.25 record 173 (243 s)
+run seed 1: mean_score 85.28 record 179 (268 s)
+run seed 0: mean_score 84.00 record 163 (278 s)
+run seed 2: mean_score 90.89 record 161 (278 s)
+mean_score 82.84 over 5 seeds (std 6.05, spread 15.64); noise_floor 15.64, baseline 82.84
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/011-gamma-0p95/results.json

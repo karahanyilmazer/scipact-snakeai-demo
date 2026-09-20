@@ -1,0 +1,14 @@
+[
+  {
+    "started": "2026-09-20T18:47:32+00:00",
+    "seconds": 279.208,
+    "exit_code": 0,
+    "command": "uv run train.py --games 300 --last 100 --seeds 0-4 --no-render",
+    "commit": "13cf10d",
+    "log": "results/experiments/011-gamma-0p95/logs/run-20260920T184732Z.log",
+    "max_seconds": 1500,
+    "timed_out": false,
+    "contract_command": "uv run train.py --games 300 --last 100 --seeds 0-4 --no-render",
+    "matches_contract": true
+  }
+]

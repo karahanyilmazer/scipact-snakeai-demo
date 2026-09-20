@@ -23,4 +23,4 @@ scope.
 | [008](008-four-replay-batches/) | Four replay batches per game instead of one | iteration | scope | done | INCONCLUSIVE | 2026-09-20 | INCONCLUSIVE: four replay batches per game read 87.13 vs 82.18 (+4.95, floor 9.15); four seeds up 8-10, one down 9.6 from a late sag. |
 | [009](009-target-network/) | Target network synced every 1000 train steps | iteration | scope | done | INCONCLUSIVE | 2026-09-20 | INCONCLUSIVE: a target network reads 83.20 vs 82.18 (+1.02, floor 9.15); the late-plateau sag it was meant to cure is unchanged. |
 | [010](010-lr-1e-4/) | LR 1e-4 instead of 2.5e-4 | iteration | scope | done | DISCARD | 2026-09-20 | DISCARD: LR 1e-4 drops mean_score from 82.18 to 40.90 (-41.28, floor 9.15); one seed never takes off and the rest are still climbing at game 300. |
-| [011](011-gamma-0p95/) | GAMMA 0.95 instead of 0.9 | iteration | scope | planned |  |  |  |
+| [011](011-gamma-0p95/) | GAMMA 0.95 instead of 0.9 | iteration | scope | done | INCONCLUSIVE | 2026-09-20 | INCONCLUSIVE: GAMMA 0.95 reads 82.84 vs 82.18 (+0.66, floor 9.15); same plateau, same late sag. |

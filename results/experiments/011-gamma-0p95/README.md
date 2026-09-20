@@ -3,17 +3,17 @@ scipact: 1
 number: 11
 slug: gamma-0p95
 title: GAMMA 0.95 instead of 0.9
-status: planned
+status: done
 weight: iteration
 needs_approval: false
 involves:
   held_out_data: false
   external_submission: false
   deletes_data: false
-date_started: null
-date_completed: null
-verdict: null
-tldr: null
+date_started: 2026-09-20
+date_completed: 2026-09-20
+verdict: INCONCLUSIVE
+tldr: "INCONCLUSIVE: GAMMA 0.95 reads 82.84 vs 82.18 (+0.66, floor 9.15); same plateau, same late sag."
 results: results.json
 hypothesis: At 0.9 a reward 20 steps away is worth 12 % of one adjacent, so a long snake values only the nearest food and walks into corridors it cannot leave; at 0.95 that horizon doubles, so the Q-values of moves that keep the board open rise relative to greedy ones, and fewer late-game deaths lift the plateau
 change: 50a4dbc
@@ -44,10 +44,27 @@ rule: inherit
 - **Writes:** `results.json` with `mean_score` (the mean over seeds 0-4 of the last-100 mean), plus the per-seed runs under `runs`
 
 ## Results
-*Fill in after running: the number, the baseline, the noise floor.*
+
+| seed | mean_score | record | steps | seconds |
+|---|---|---|---|---|
+| 0 | 84.00 | 163 | 516009 | 278 |
+| 1 | 85.28 | 179 | 513798 | 268 |
+| 2 | 90.89 | 161 | 521630 | 278 |
+| 3 | 78.76 | 149 | 455884 | 231 |
+| 4 | 75.25 | 173 | 474249 | 243 |
+
+Mean over seeds **82.84**, std 6.05, per-seed spread 15.64; wall clock 279 s.
+
+```
+    key statistic mean_score = 82.836
+    KEEP          no
+    DISCARD       no
+    improvement +0.656 vs baseline 82.18 (004-lr-2p5e-4), noise floor 9.15
+    written to results/experiments/011-gamma-0p95/verdict.json; index regenerated
+```
 
 ## Reading
-*One line after the close: what the number says about the why, and what it rules out.*
+Per-seed deltas +3.8, -1.4, +13.3, -4.8, -7.6, no shared sign, and the same shape as before (peaks of 86-91 in games 150-250, then a sag on three seeds), so a longer horizon neither raises the plateau nor removes the sag; it took off a little earlier (all seeds past 40 by game 150) without that reaching the last 100 games, which rules out horizon length as the plateau's limiter at this state representation.
 
 ## Deviations from pre-registration
 
