@@ -15,7 +15,7 @@ LR = 0.00025
 GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
-STATE_SIZE = 14  # 3 danger, 4 direction, 4 food, 3 trap
+STATE_SIZE = 17  # 3 danger, 4 direction, 4 food, 3 trap, 3 free-run length
 
 CLOCKWISE = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
 
@@ -59,6 +59,16 @@ def reachable(game, start, cap):
             ):
                 seen.add(q)
                 stack.append(q)
+    return n
+
+
+def free_run(game, start, direction):
+    """Free cells in a straight line from `start` (inclusive) in `direction`."""
+    n = 0
+    pt = start
+    while not game.is_collision(pt):
+        n += 1
+        pt = step(pt, direction)
     return n
 
 
@@ -115,10 +125,18 @@ class Agent:
         # than the snake, so the head cannot get out before the body fills it.
         i = CLOCKWISE.index(game.direction)
         need = len(game.snake)
-        for d in (CLOCKWISE[i], CLOCKWISE[(i + 1) % 4], CLOCKWISE[(i - 1) % 4]):
+        moves = (CLOCKWISE[i], CLOCKWISE[(i + 1) % 4], CLOCKWISE[(i - 1) % 4])
+        for d in moves:
             state.append(reachable(game, step(head, d), need) < need)
 
-        return np.array(state, dtype=int)
+        # Free run straight / right / left: how many cells the head could
+        # travel in that direction before a wall or the body, as a fraction
+        # of the board's longer side.
+        longest = max(game.w, game.h) / BLOCK_SIZE
+        for d in moves:
+            state.append(free_run(game, step(head, d), d) / longest)
+
+        return np.array(state, dtype=float)
 
     def remember(self, state, action, reward, next_state, done):
         self.memory.append(
