@@ -57,10 +57,10 @@ Mean over seeds **65.04**, std 14.11, per-seed spread 37.92; wall clock 299 s.
 
 ```
 ✓ 006-huber-loss closed: DISCARD
-    key statistic mean_score = 65.04
+    key statistic mean_score = 65.036
     KEEP          no
     DISCARD       fired
-    improvement -17.14 vs baseline 82.18 (004-lr-2p5e-4), noise floor 9.15
+    improvement -17.144 vs baseline 82.18 (004-lr-2p5e-4), noise floor 9.15
 ```
 
 ## Reading
