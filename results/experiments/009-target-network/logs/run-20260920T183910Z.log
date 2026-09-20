@@ -1,0 +1,12 @@
+# scipact run 009-target-network
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:39:10+00:00
+# max seconds: 1500
+
+run seed 3: mean_score 89.48 record 153 (210 s)
+run seed 2: mean_score 86.07 record 161 (240 s)
+run seed 1: mean_score 81.14 record 139 (264 s)
+run seed 4: mean_score 80.26 record 175 (275 s)
+run seed 0: mean_score 79.04 record 159 (275 s)
+mean_score 83.20 over 5 seeds (std 4.41, spread 10.44); noise_floor 10.44, baseline 83.20
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/009-target-network/results.json

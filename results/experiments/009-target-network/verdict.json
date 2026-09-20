@@ -1,0 +1,19 @@
+{
+  "outcome": "INCONCLUSIVE",
+  "statistic": "mean_score",
+  "statistic_value": 83.198,
+  "baseline": 82.18,
+  "baseline_from": "004-lr-2p5e-4",
+  "improvement": 1.0179999999999865,
+  "noise_floor": 9.15,
+  "calibration": "005-spread-with-lr-2p5e-4",
+  "direction": "max",
+  "branches": {
+    "KEEP": false,
+    "DISCARD": false
+  },
+  "tolerance": 0.0,
+  "experiment": "009-target-network",
+  "closed_at": "2026-09-20T18:43:53+00:00",
+  "lock_hash": "e7cd37604268f9e79c0f8692ae362ca8781271920f6303dc6952c9224e2b0d62"
+}
