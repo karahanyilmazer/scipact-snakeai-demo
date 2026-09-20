@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "001-spread-of-mean-score-unchanged",
+  "hash": "85dab075c5169cbe24879567c870133106f46b721105982885b64dfa65147ad2",
+  "commit": "0723994",
+  "readme": "results/experiments/001-spread-of-mean-score-unchanged/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T17:56:41+00:00",
+  "weight": "full",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
