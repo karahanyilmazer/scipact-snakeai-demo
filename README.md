@@ -86,6 +86,15 @@ results file.
 | `game.py` | the Snake environment, rendering and the in-window chart |
 | `snake_game_human.py` | the game, keyboard-controlled |
 
+## Experiments so far
+
+Three SciPact campaigns ran on the branches `supervised`, `autonomous` and
+`autonomous-2`, each with its archive under `results/experiments/`.
+`results/CONSOLIDATION.md` reads them together: what is settled, what is
+open, what only looked contradictory, and which instrument each number was
+measured on. `results/HANDOFF.md` and the draft `results/SCOPE.md` are the
+next campaign's starting point.
+
 ## License
 
 MIT, as upstream.

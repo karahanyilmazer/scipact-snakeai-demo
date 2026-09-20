@@ -1,0 +1,106 @@
+# SciPact: preregister experiments before an agent runs, iterates on, or optimizes them.
+# Everything project-specific is here. The tooling is generic.
+
+[project]
+# supervised: a person approves every experiment before it runs.
+# autonomous: experiments within the approved scope (results/SCOPE.md) run
+# without asking; anything marked true under `involves:` still needs a person.
+mode = "autonomous"
+
+[paths]
+experiments = "results/experiments"
+scope = "results/SCOPE.md"
+handoff = "results/HANDOFF.md"             # written at the first `scipact close`
+decisions_log = "results/decisions_log.md" # likewise
+index = "results/experiments/README.md"
+# The contract templates ship with the plugin. To change one for this project,
+# put your own file at its path here; nothing is copied in by `scipact init`.
+template = "results/experiments/TEMPLATE.md"
+template_iteration = "results/experiments/ITERATION.md"
+
+[approval]
+# An experiment whose front matter marks any of these `involves:` true needs a
+# person's approval whatever the mode. Describe them in plain words in SCOPE.md.
+always_ask = ["held_out_data", "external_submission", "deletes_data"]
+
+[results]
+# How a result counts. An approved scope (results/SCOPE.md) may set either of
+# these in its toml block; the scope's value then wins, since a person approved it.
+min_seeds = 20               # fewer is a warning at check time, never a refusal; the scope says 20
+# 0: every bar is compared exactly as written. A value such as 0.02 loosens
+# EVERY branch of every rule, ADOPT and REJECT alike: `delta >= 3` is met at
+# 2.94 and `ci_high < 2` at 2.04, so both fire more easily and a verdict the
+# words call INCONCLUSIVE can come out decisive. `scipact check` prints the
+# effective bars whenever this is set.
+threshold_tolerance = 0
+
+[iteration]
+# For the autoresearch loop: the statistic a calibration contract measures
+# and iterations hill-climb, and its direction. A supervised project that
+# loops names them here (it has no scope to approve); in autonomous mode the
+# scope's own [iteration] table, which a person approves, takes precedence.
+# The noise floor and the baseline are measured by the calibration, never
+# written here. Uncomment to use:
+statistic = "mean_score"
+direction = "max"
+calibration_runs = 3
+
+[lock]
+# Sections hashed into scipact.lock, together with the front-matter rule.
+# Editing any of them after the lock is a deviation to write up before re-locking.
+sections = ["Question", "Hypothesis / Prior", "Pre-registration", "Method"]
+
+[verdicts]
+# Outcomes a rule may name. A decisive verdict clears the unresolved streak;
+# an unresolved one extends it.
+decisive = ["ADOPT", "REJECT", "SUPPORTED", "REFUTED", "PASS", "FAIL", "KEEP", "DISCARD"]
+unresolved = ["INCONCLUSIVE", "VOID"]
+
+[lint]
+require_instrument_check = true   # each guard must say what it cannot detect
+require_mde = false               # warn, not fail, when no minimum detectable effect is stated
+require_clean_tree = true         # uncommitted source means the recorded commit lies
+
+[stop_and_ask]
+# Unresolved verdicts in a row, over full-weight experiments: the bar. In
+# supervised mode the bar is a stop. In autonomous mode it means "change
+# approach" (a calibration contract, a sharper question, another family in
+# scope), and the stop comes at bar x autonomous_stop_multiplier with no
+# decisive verdict in between. Iterations do not count: inside the noise floor
+# is a plateau, reported by `scipact status`, not a design that resolves nothing.
+unresolved_streak = 3
+autonomous_stop_multiplier = 2
+
+[run]
+# A run past this many seconds is killed and recorded as timed out in
+# runs.json (exit code 124), so an unattended loop cannot hang on a script
+# that never returns; the close is then a VOID with a reason. 0 means no cap.
+# `scipact run --timeout N` overrides it for one run. Set it from a measured
+# run, with room: a 100-second run and a cap of 600 is a sensible pair.
+max_seconds = 5400           # a 40-run A/B is ~25 min on 12 cores, the 60-run calibration ~40 min
+
+[gate]
+# Commands that run an experiment. A Bash call whose command matches one of
+# these regexes is refused by the Claude Code hook unless it goes through
+# `scipact run <NNN> -- <command>`. A pattern matches an INVOCATION, how the
+# file is run, never a bare file name: `\btrain\.py\b` would also refuse
+# `cat train.py`, `git diff train.py` and a commit message that names it.
+# The hook judges each command of a compound line on its own, never judges
+# a file tool or git (cat, sed, grep, cp, chmod, git ...), and never reads a
+# heredoc's body. Edit these for your project; keep the shape.
+enabled = true
+run_patterns = [
+  # python train.py, python3.12 train.py, uv run train.py, uv run python train.py, torchrun train.py ...
+  "(^|[\\s/])(python[0-9.]*|uv run|uvx|torchrun)\\s+(\\S+\\s+)*(\\S*/)?train\\.py\\b",
+  "(^|[\\s/])(python[0-9.]*|uv run|uvx)\\s+(\\S+\\s+)*(\\S*/)?run_experiment\\.py\\b",
+  # a script kept beside its contract, run by an interpreter or directly
+  "(^|[\\s/])(python[0-9.]*|uv run|uvx|bash|sh)\\s+(\\S+\\s+)*\\S*results/experiments/\\d+-[^/\\s]+/scripts/",
+  "^(\\S+=\\S*\\s+)*\\.?/?results/experiments/\\d+-[^/\\s]+/scripts/\\S+",
+]
+# Commands that never count, even if they match a run pattern.
+exempt_patterns = [
+  "--dry-run",
+  "--help",
+  "--smoke",                 # train.py --smoke: 10 headless games, writes nothing
+  "\\bpytest\\b",
+]
