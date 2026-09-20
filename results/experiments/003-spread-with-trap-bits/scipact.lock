@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "003-spread-with-trap-bits",
+  "hash": "5cf9884a2557d39cdab352876509dfb6244c5751a12b444494d6fb93d982ff13",
+  "commit": "9c551ab",
+  "readme": "results/experiments/003-spread-with-trap-bits/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:05:46+00:00",
+  "weight": "full",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
