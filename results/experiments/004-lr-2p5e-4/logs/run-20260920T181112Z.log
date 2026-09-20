@@ -1,0 +1,12 @@
+# scipact run 004-lr-2p5e-4
+# command: uv run train.py --games 300 --last 100 --seeds 0-4 --no-render
+# started: 2026-09-20T18:11:12+00:00
+# max seconds: 1500
+
+run seed 2: mean_score 77.55 record 146 (144 s)
+run seed 3: mean_score 83.60 record 147 (172 s)
+run seed 0: mean_score 80.23 record 146 (215 s)
+run seed 1: mean_score 86.70 record 169 (220 s)
+run seed 4: mean_score 82.82 record 154 (253 s)
+mean_score 82.18 over 5 seeds (std 3.47, spread 9.15); noise_floor 9.15, baseline 82.18
+wrote /Users/karahanyilmazer/Coding/python/personal/scipact-demo/results/experiments/004-lr-2p5e-4/results.json

@@ -6,19 +6,20 @@ old versions. Rewrite it in full at every handoff and keep it under a screen.
 ## Where we are
 
 - Campaign: hill-climb `mean_score` (last 100 of 300 games, mean over seeds
-  0-4) of the Snake DQN agent; 10 iterations, then hand off. 1 of 10 run.
-- Best kept: **75.22** with trap bits in the state (002, KEEP, +42.05 over
-  the tutorial's 33.17). HEAD holds it.
-- Floor in force 5.48, baseline 75.22 (003, PASS). A reading now
+  0-4) of the Snake DQN agent; 10 iterations, then hand off. 2 of 10 run.
+- Best kept: **82.18** with trap bits (002, +42.05) and LR 2.5e-4 (004,
+  +6.96) on the tutorial's 33.17. HEAD holds both.
+- Floor in force 5.48, baseline 75.22 (003, PASS); stale, the kept code's
+  own spread is 9.15, so recalibrate first. A reading now
   takes about 280 s; `[run].max_seconds` is 1500.
 
 ## Next
 
-1. Done: recalibrated at level 75 (003).  Next, the LR question below.
-2. Does a lower learning rate (2.5e-4) lift the plateau, given noisy
-   single-step updates on top of the batch replay?
-3. Then: Huber loss, a target network, longer exploration, a deeper net,
-   a food-distance feature.
+1. Recalibrate on the kept code at level 82.
+2. Does a Huber loss lift the plateau (the -10/+10 rewards make MSE
+   targets spiky)?
+3. Then: a target network, longer exploration, a deeper net, a
+   food-distance feature, a bigger batch, GAMMA 0.95.
 
 ## Blocked on a person
 
@@ -30,5 +31,7 @@ old versions. Rewrite it in full at every handoff and keep it under a screen.
   because the seeds fail to vary (001).
 - Self-trapping was the tutorial agent's plateau: three trap bits (capped
   flood fill per move) more than double every seed (002).
+- LR 2.5e-4 beats 1e-3 on every seed at level 75 (004); a lower LR still
+  is untested.
 - Training is deterministic under the seeds: 003 reproduced 002 exactly, so
   a re-run is a code check, not a new noise draw.

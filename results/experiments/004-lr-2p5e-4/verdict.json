@@ -1,0 +1,19 @@
+{
+  "outcome": "KEEP",
+  "statistic": "mean_score",
+  "statistic_value": 82.18,
+  "baseline": 75.224,
+  "baseline_from": "002-trap-bits-in-state",
+  "improvement": 6.956000000000003,
+  "noise_floor": 5.48,
+  "calibration": "003-spread-with-trap-bits",
+  "direction": "max",
+  "branches": {
+    "KEEP": true,
+    "DISCARD": false
+  },
+  "tolerance": 0.0,
+  "experiment": "004-lr-2p5e-4",
+  "closed_at": "2026-09-20T18:15:33+00:00",
+  "lock_hash": "33ebb91a90cd65429371e1c50579637a09aabf2a5a2fa81ef1969e8e6e7dc56b"
+}
