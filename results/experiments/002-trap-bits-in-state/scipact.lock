@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "002-trap-bits-in-state",
+  "hash": "7d3c16c10370929718551991944597e135fa4eddf0edf9296ed64a104fe5f36b",
+  "commit": "a688098",
+  "readme": "results/experiments/002-trap-bits-in-state/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T17:59:55+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
