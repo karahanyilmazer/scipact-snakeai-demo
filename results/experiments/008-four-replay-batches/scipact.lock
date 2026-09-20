@@ -1,0 +1,19 @@
+{
+  "scipact": "0.1.0",
+  "experiment": "008-four-replay-batches",
+  "hash": "bf068d8ccbdf5b0cfc9c32d6c72d75cf4f963397b7be4eab31a8950f3c12c94e",
+  "commit": "9efe993",
+  "readme": "results/experiments/008-four-replay-batches/README.md",
+  "sections": [
+    "Question",
+    "Hypothesis / Prior",
+    "Pre-registration",
+    "Method"
+  ],
+  "locked_at": "2026-09-20T18:32:28+00:00",
+  "weight": "iteration",
+  "needs_approval": false,
+  "scope": "104ed7194ebe",
+  "approval": null,
+  "history": []
+}
