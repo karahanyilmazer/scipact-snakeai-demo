@@ -51,7 +51,7 @@ waits for `scipact approve`, whatever the mode:
 
 ```toml
 version = "1"                # a label for people; the approval binds to the content
-status = "draft"
+status = "approved"
 
 [results]
 min_seeds = 5
@@ -61,6 +61,14 @@ threshold_tolerance = 0      # bars as written
 statistic = "mean_score"
 direction = "max"
 calibration_runs = 5         # seeds 0-4, one run each
+
+[approval]
+by = "Karahan Yilmazer"
+at = "2026-09-20T17:55:36+00:00"
+asked_at = "2026-09-20T17:54:41+00:00"
+quote = "set this project up for autonomous preregistration, then run autoresearch on mean_score: hill-climb the snake agent's mean score over the last 100 of 300 games ... Stop after 10 iterations, and leave a handoff."
+via = "claude-code"
+hash = "104ed7194ebea7f89485bb24ee748413aa266359d5cf34331aa5b48389c6ae26"
 ```
 
 ## Stop and ask
