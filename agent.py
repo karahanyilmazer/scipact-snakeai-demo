@@ -16,7 +16,6 @@ GAMMA = 0.9  # discount rate
 HIDDEN_SIZE = 256
 EXPLORE_GAMES = 80  # epsilon = EXPLORE_GAMES - n_games, out of 200
 STATE_SIZE = 14  # 3 danger, 4 direction, 4 food, 3 trap
-TARGET_SYNC = 1000  # train steps between refreshes of the target network
 
 CLOCKWISE = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
 
@@ -70,9 +69,7 @@ class Agent:
         self.gamma = GAMMA
         self.memory = deque(maxlen=MAX_MEMORY)  # popleft()
         self.model = Linear_QNet(STATE_SIZE, HIDDEN_SIZE, 3)
-        self.trainer = QTrainer(
-            self.model, lr=LR, gamma=self.gamma, target_sync=TARGET_SYNC
-        )
+        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
     def get_state(self, game):
         head = game.snake[0]
